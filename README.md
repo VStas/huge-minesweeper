@@ -1,4 +1,11 @@
 todo:
+- Cell layout
+- Bomb generator
+- Opening cells
+- Losing
+- Winning
+- Form
+- Smiley bar
 1. Menu as default CRA screen. Its amazing.
 
 

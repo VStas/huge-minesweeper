@@ -4,6 +4,8 @@ import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
 import { field } from '../../store/GameField';
 import { cn as createCn } from '@bem-react/classname'
 
+import './GameField.css';
+
 // import {field} from '../../store/GameField';
 
 // export {field};
@@ -20,18 +22,32 @@ import { cn as createCn } from '@bem-react/classname'
 
 const cn = createCn('cell');
 
+// todo м б вынести обертку, но хз, много компонентов. Если не тормозит то не надо
 const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowIndex, style }) => {
+    if (columnIndex === 5 && rowIndex === 5) {
+      console.log('render');
+    }
+    // return <div className={cn()} style={style} />
     const cell = field.getCell(columnIndex, rowIndex);
+    const isOpen = cell.isOpen;
     return (
         <div
-            className={cn()}
+            className={cn({val: isOpen ? 1 : undefined})}
             style={style}
-            onClick={() => cell.open()}
+            onMouseDown={() => cell.open()}
         >
-            {cell.isOpen ? 'o' : 'c'}
+            {cell.isOpen && '1'}
         </div>
     );
 });
+
+// const GridCell: React.FC<GridChildComponentProps> = ({ columnIndex, rowIndex, style, children }) => {
+//   return (
+//       <div style={style}>
+//         <Cell columnIndex={columnIndex} rowIndex={rowIndex} />
+//       </div>
+//   );
+// };
 
 export const GameField: React.FC = () => (
     <Grid

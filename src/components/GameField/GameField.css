@@ -1,0 +1,21 @@
+.cell {
+    background: #ddd;
+    border: 1px solid #aaa;
+
+    /* width: 14px;
+    height: 14px; */
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    user-select: none;
+}
+
+.cell_val_1 {
+    color: blue;
+}
+
+.Grid {
+    background: #ddd;
+}
