@@ -1,4 +1,7 @@
 import { action, makeObservable, observable } from "mobx";
+import { generateRandomSet } from "../utils/bombs";
+
+export const BOMB = -1;
 
 export class GameField {
     
@@ -7,6 +10,7 @@ export class GameField {
     //         openCell: action
     //     })
     // }
+
     cells: Map<number, Cell> = new Map();
 
     // openCell = (x: number, y: number) => {
@@ -14,10 +18,15 @@ export class GameField {
     //     cell.isOpen = true;
     // }
 
-    sizeX = 10000;
-    sizeY = 10000;
+    width = 10000;
+    height = 10000;
+
+    bombs = 50000000;
+
+    bombsSet: Set<number> = generateRandomSet(this.bombs, this.width * this.height - 1);
+
     getCell(x: number, y: number) {
-        const index = x * this.sizeX + y;
+        const index = y * this.width + x;
         if (!this.cells.has(index)) {
             const cell = new Cell()
             this.cells.set(index, cell);
@@ -25,6 +34,14 @@ export class GameField {
         }
         return this.cells.get(index)!;
     }
+
+    getCellValue(x: number, y: number) {
+        if (this.bombsSet.has(y * this.width + x)) {
+            return BOMB;
+        }
+        return 1;
+    }
+
     // cells: {isOpen: boolean}[][]
 
     // constructor() {
@@ -49,5 +66,5 @@ class Cell {
         this.isOpen = true;
     }
 
-    isOpen = false;
+    isOpen = true;
 }
