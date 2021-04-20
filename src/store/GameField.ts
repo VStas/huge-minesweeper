@@ -1,5 +1,6 @@
 import { action, makeObservable, observable } from "mobx";
-import { generateRandomSet } from "../utils/bombs";
+import { CellStatus } from "../types";
+import { getRandomInt } from "../utils/bombs";
 
 export const BOMB = -1;
 
@@ -11,7 +12,7 @@ export class GameField {
     //     })
     // }
 
-    cells: Map<number, Cell> = new Map();
+    cells: Cell[] = [];
 
     // openCell = (x: number, y: number) => {
     //     const cell = this.getCell(x, y);
@@ -21,26 +22,39 @@ export class GameField {
     width = 10000;
     height = 10000;
 
-    bombs = 50000000;
+    bombsTotal = 10000000;
 
-    bombsSet: Set<number> = generateRandomSet(this.bombs, this.width * this.height - 1);
+    cellsToPlace = this.width * this.height;
+    bombsToPlace = this.bombsTotal;
+    // bombsSet: Set<number> = generateRandomSet(this.bombs, this.width * this.height - 1);
 
     getCell(x: number, y: number) {
         const index = y * this.width + x;
-        if (!this.cells.has(index)) {
-            const cell = new Cell()
-            this.cells.set(index, cell);
+        if (!this.cells[index]) {
+            const cell = new Cell(this.shouldHaveBomb());
+            this.cellsToPlace -= 1;
+            this.cells[index] = cell;
             return cell;
         }
-        return this.cells.get(index)!;
+        return this.cells[index];
     }
 
-    getCellValue(x: number, y: number) {
-        if (this.bombsSet.has(y * this.width + x)) {
-            return BOMB;
+    private shouldHaveBomb() {
+        const rnd = getRandomInt({min: 1, max: this.cellsToPlace});
+        const result = rnd <= this.bombsToPlace;
+        if (result) {
+            this.bombsToPlace -= 1;
+            console.log(this.bombsToPlace);
         }
-        return 1;
+        return result;
     }
+
+    // getCellValue(x: number, y: number) {
+    //     if (this.bombsSet.has(y * this.width + x)) {
+    //         return BOMB;
+    //     }
+    //     return 1;
+    // }
 
     // cells: {isOpen: boolean}[][]
 
@@ -54,17 +68,40 @@ export class GameField {
 export const field = new GameField();
 
 class Cell {
-    constructor() {
+    status = CellStatus.INITIAL;
+
+    constructor(public hasBomb: boolean) {
         // console.log(numOfCells);
         makeObservable(this, {
-            isOpen: observable,
-            open: action
+            status: observable,
+            hasBomb: observable,
+            open: action,
+            toggleFlag: action
         })
     }
 
     open() {
-        this.isOpen = true;
+        if (this.status === CellStatus.INITIAL) {
+            this.status = CellStatus.OPEN;
+        }
     }
 
-    isOpen = true;
+    toggleFlag() {
+        if (this.status === CellStatus.INITIAL) {
+            this.status = CellStatus.FLAGGED;
+            return;
+        }
+        if (this.status === CellStatus.FLAGGED) {
+            this.status = CellStatus.INITIAL;
+        }
+    }
+
+    getValue() {
+        if (this.status !== CellStatus.OPEN) {
+            return;
+        }
+        if (this.hasBomb) return BOMB;
+        return 1;
+    }
+
 }

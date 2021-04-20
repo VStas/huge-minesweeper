@@ -1,4 +1,6 @@
 todo:
+- Users can only place as many flags as there are bombs (text above)
+- Opening cells (open nearby if 0)
 - Cell layout
 - Bomb generator
 - Opening cells

@@ -12,12 +12,22 @@
     user-select: none;
 }
 
-.cell_val_1 {
-    color: blue;
+
+/* open */
+.cell_status_1 {
     background: #fff;
 }
 
-.cell_val_-1 {
+/* flagged */
+.cell_status_2 {
+    background-image: url("sprite.png");
+}
+
+.cell_value_1 {
+    color: blue;
+}
+
+.cell_value_-1 {
     background: #f00;
 }
 

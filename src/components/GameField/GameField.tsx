@@ -29,16 +29,18 @@ const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowInde
     // }
     // return <div className={cn()} style={style} />
     const cell = field.getCell(columnIndex, rowIndex);
-    const isOpen = cell.isOpen;
-    let value = isOpen ? field.getCellValue(columnIndex, rowIndex) : undefined;
+    const value = cell.getValue();
+    const status = cell.status;
+    // let value = isOpen ? cell.getValue() : undefined;
   
     return (
         <div
-            className={cn({val: isOpen ? value : undefined})}
+            className={cn({value, status})}
             style={style}
-            onMouseDown={() => cell.open()}
+            onMouseDown={(e) => e.button === 0 ? cell.open() : cell.toggleFlag()}
+            onContextMenu={(e) => {e.preventDefault(); e.stopPropagation()}}
         >
-            {cell.isOpen && value !== BOMB && value}
+            {value !== BOMB && value}
         </div>
     );
 });
