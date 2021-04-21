@@ -5,6 +5,7 @@ import { field, BOMB } from '../../store/GameField';
 import { cn as createCn } from '@bem-react/classname'
 
 import './GameField.css';
+import { CellStatus } from '../../types';
 
 // import {field} from '../../store/GameField';
 
@@ -29,8 +30,13 @@ const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowInde
     // }
     // return <div className={cn()} style={style} />
     const cell = field.getCell(columnIndex, rowIndex);
-    const value = cell.getValue();
     const status = cell.status;
+    const value = React.useMemo(() => {
+      if (status !== CellStatus.OPEN) {
+        return;
+      }
+      return field.getValue(columnIndex, rowIndex);
+    }, [columnIndex, rowIndex, status]);
     // let value = isOpen ? cell.getValue() : undefined;
   
     return (
@@ -61,7 +67,7 @@ export const GameField: React.FC = () => (
       height={600}
       rowCount={field.height}
       rowHeight={16}
-      width={800}
+      width={1200}
     >
       {Cell}
     </Grid>

@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { CellStatus } from "../types";
-import { getRandomInt } from "../utils/bombs";
+import { getRandomInt, countNearbyBombs } from "../utils/bombs";
 
 export const BOMB = -1;
 
@@ -27,10 +27,10 @@ export class GameField {
     //     cell.isOpen = true;
     // }
 
-    width = 10;
-    height = 10;
+    width = 10000;
+    height = 10000;
 
-    bombsTotal = 5;
+    bombsTotal = 10000000;
 
     cellsToPlace = this.width * this.height;
     bombsToPlace = this.bombsTotal;
@@ -59,12 +59,20 @@ export class GameField {
         return this.cells[index];
     }
 
+    getValue(x: number, y: number) {
+        const cell = this.getCell(x, y); // no need really
+        if (cell.hasBomb) {
+            return BOMB;
+        }
+        return countNearbyBombs(x, y, this.width - 1, this.height - 1, (x, y) => this.getCell(x, y).hasBomb);
+    }
+
     private shouldHaveBomb() {
         const rnd = getRandomInt({min: 1, max: this.cellsToPlace});
         const result = rnd <= this.bombsToPlace;
         if (result) {
             this.bombsToPlace -= 1;
-            console.log(this.bombsToPlace);
+            // console.log(this.bombsToPlace);
         }
         return result;
     }
@@ -88,7 +96,7 @@ export class GameField {
 export const field = new GameField();
 
 class Cell {
-    status = CellStatus.INITIAL;
+    status = CellStatus.OPEN;
 
     constructor(public hasBomb: boolean) {
         // console.log(numOfCells);
