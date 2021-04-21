@@ -37,8 +37,8 @@ const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowInde
         <div
             className={cn({value, status})}
             style={style}
-            onMouseDown={(e) => e.button === 0 ? cell.open() : cell.toggleFlag()}
-            onContextMenu={(e) => {e.preventDefault(); e.stopPropagation()}}
+            onMouseDown={(e) => e.button === 0 ? cell.open() : field.toggleFlag(columnIndex, rowIndex)}
+            onContextMenu={(e) => {e.preventDefault(); e.stopPropagation();}}
         >
             {value !== BOMB && value}
         </div>

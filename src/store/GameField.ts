@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { CellStatus } from "../types";
 import { getRandomInt } from "../utils/bombs";
 
@@ -12,6 +12,14 @@ export class GameField {
     //     })
     // }
 
+    constructor() {
+        // console.log(numOfCells);
+        makeObservable(this, {
+            flagsPlaced: observable,
+            flagsLeft: computed,
+            toggleFlag: action
+        });
+    }
     cells: Cell[] = [];
 
     // openCell = (x: number, y: number) => {
@@ -19,14 +27,26 @@ export class GameField {
     //     cell.isOpen = true;
     // }
 
-    width = 10000;
-    height = 10000;
+    width = 10;
+    height = 10;
 
-    bombsTotal = 10000000;
+    bombsTotal = 5;
 
     cellsToPlace = this.width * this.height;
     bombsToPlace = this.bombsTotal;
+
+    flagsPlaced = 0;
     // bombsSet: Set<number> = generateRandomSet(this.bombs, this.width * this.height - 1);
+
+    get flagsLeft() {
+        return this.bombsTotal - this.flagsPlaced;
+    }
+
+    toggleFlag(x: number, y: number) {
+        const index = y * this.width + x;
+        const cell = this.cells[index];
+        this.flagsPlaced += cell.toggleFlag(this.flagsPlaced < this.bombsTotal);
+    }
 
     getCell(x: number, y: number) {
         const index = y * this.width + x;
@@ -76,7 +96,7 @@ class Cell {
             status: observable,
             hasBomb: observable,
             open: action,
-            toggleFlag: action
+            // toggleFlag: action
         })
     }
 
@@ -86,14 +106,16 @@ class Cell {
         }
     }
 
-    toggleFlag() {
-        if (this.status === CellStatus.INITIAL) {
+    toggleFlag(canFlag: boolean) {
+        if (canFlag && this.status === CellStatus.INITIAL) {
             this.status = CellStatus.FLAGGED;
-            return;
+            return 1;
         }
         if (this.status === CellStatus.FLAGGED) {
             this.status = CellStatus.INITIAL;
+            return -1;
         }
+        return 0;
     }
 
     getValue() {

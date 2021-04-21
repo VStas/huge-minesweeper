@@ -1,10 +1,17 @@
 import React from 'react';
 import { GameField } from './components/GameField/GameField';
+import { Header } from './components/Header/Header';
+import { field } from './store/GameField';
 // import logo from './logo.svg';
 // import './App.css';
 
 function App() {
-  return <GameField />
+    return (
+        <>
+            <Header field={field} />
+            <GameField />
+        </>
+    );
 }
 
 // function App() {
