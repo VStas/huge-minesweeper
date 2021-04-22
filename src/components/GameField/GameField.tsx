@@ -31,6 +31,7 @@ const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowInde
     // return <div className={cn()} style={style} />
     const cell = field.getCell(columnIndex, rowIndex);
     const status = cell.status;
+    // круто что мемо. И по памяти огонь и не надо пересчитывать
     const value = React.useMemo(() => {
       if (status !== CellStatus.OPEN) {
         return;
@@ -38,15 +39,26 @@ const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, rowInde
       return field.getValue(columnIndex, rowIndex);
     }, [columnIndex, rowIndex, status]);
     // let value = isOpen ? cell.getValue() : undefined;
+
+    function handleMouseDown(e: React.MouseEvent) {
+      if (e.button === 0) {
+        if (status !== CellStatus.INITIAL) {
+          return;
+        }
+        field.open(columnIndex, rowIndex);
+        return;
+      }
+      field.toggleFlag(columnIndex, rowIndex); //todo больше логики сюда
+    }
   
     return (
         <div
             className={cn({value, status})}
             style={style}
-            onMouseDown={(e) => e.button === 0 ? cell.open() : field.toggleFlag(columnIndex, rowIndex)}
+            onMouseDown={handleMouseDown}
             onContextMenu={(e) => {e.preventDefault(); e.stopPropagation();}}
         >
-            {value !== BOMB && value}
+            {value !== BOMB && value !== 0 && value}
         </div>
     );
 });

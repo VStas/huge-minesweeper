@@ -1,6 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { CellStatus } from "../types";
-import { getRandomInt, countNearbyBombs } from "../utils/bombs";
+import { getRandomInt, countNearbyBombs, getNearbyCoords } from "../utils/bombs";
+import { CircularQueue } from "../utils/queue";
 
 export const BOMB = -1;
 
@@ -35,6 +36,7 @@ export class GameField {
     cellsToPlace = this.width * this.height;
     bombsToPlace = this.bombsTotal;
 
+    queue = new CircularQueue<[number, number]>(this.width * this.height);
     flagsPlaced = 0;
     // bombsSet: Set<number> = generateRandomSet(this.bombs, this.width * this.height - 1);
 
@@ -46,6 +48,54 @@ export class GameField {
         const index = y * this.width + x;
         const cell = this.cells[index];
         this.flagsPlaced += cell.toggleFlag(this.flagsPlaced < this.bombsTotal);
+    }
+
+    // ячейка точно INITIAL
+    open(x: number, y: number) {
+        const index = y * this.width + x;
+        const cell = this.cells[index];
+        cell.open();
+        const value = this.getValue(x, y);
+        if (value !== 0) {
+            return;
+        }
+        this.queue.enQueue([x, y]);
+        this.openRecursive();
+    }
+
+    working = false;
+
+    async openRecursive() {
+        if (this.working) {
+            return;
+        }
+        this.working = true;
+        console.log(true);
+        let counter = 0;
+        while (this.queue.Front() !== -1) {
+            counter += 1;
+            const [x, y] = this.queue.Front() as [number, number];
+            this.queue.deQueue();
+
+            getNearbyCoords(x, y, this.width - 1, this.height - 1)
+                .forEach(([x, y]) => {
+                // console.log([x, y]);
+                    const index = y * this.width + x;
+                    const cell = this.cells[index];
+                    if (cell.status === CellStatus.INITIAL) {
+                        cell.open();
+                        if (this.getValue(x, y) === 0) {
+                            this.queue.enQueue([x, y]);
+                        }
+                    }
+                });
+            if (counter === 1000) {
+                counter = 0;
+                await new Promise(resolve => setTimeout(resolve, 0));
+            }
+        }
+        this.working = false;
+        console.log(false);
     }
 
     getCell(x: number, y: number) {
@@ -60,7 +110,8 @@ export class GameField {
     }
 
     getValue(x: number, y: number) {
-        const cell = this.getCell(x, y); // no need really
+        const index = y * this.width + x;
+        const cell = this.cells[index];
         if (cell.hasBomb) {
             return BOMB;
         }
@@ -96,7 +147,7 @@ export class GameField {
 export const field = new GameField();
 
 class Cell {
-    status = CellStatus.OPEN;
+    status = CellStatus.INITIAL;
 
     constructor(public hasBomb: boolean) {
         // console.log(numOfCells);
