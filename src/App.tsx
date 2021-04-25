@@ -1,11 +1,21 @@
 import React from 'react';
 import { GameField } from './components/GameField/GameField';
 import { Header } from './components/Header/Header';
+import { Settings } from './scenes/settings/Settings';
 import { field } from './store/GameField';
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
+import { cn as createCn } from '@bem-react/classname'
+
+const cn = createCn('app');
 
 function App() {
+    return (
+        <div className={cn()}>
+            <h1>HUGE Minesweeper</h1>
+            <Settings />
+        </div>
+    );
     return (
         <>
             <Header field={field} />

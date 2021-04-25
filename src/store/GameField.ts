@@ -89,7 +89,7 @@ export class GameField {
                         }
                     }
                 });
-            if (counter === 1000) {
+            if (counter === 100) {
                 counter = 0;
                 await new Promise(resolve => setTimeout(resolve, 0));
             }
