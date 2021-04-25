@@ -1,28 +1,39 @@
 import React from 'react';
 import { GameField } from './components/GameField/GameField';
-import { Header } from './components/Header/Header';
-import { Settings } from './scenes/settings/Settings';
+import { Header } from './scenes/game/Header';
+import { Menu } from './scenes/menu/Menu';
 import { field } from './store/GameField';
+import { GameState } from './store/Root';
 // import logo from './logo.svg';
 import './App.css';
 import { cn as createCn } from '@bem-react/classname'
+import { RootContext } from './context';
+import { observer } from 'mobx-react-lite';
 
 const cn = createCn('app');
 
-function App() {
+const App = observer(() => {
+    const rootStore = React.useContext(RootContext);
+
+    console.log('App');
     return (
         <div className={cn()}>
             <h1>HUGE Minesweeper</h1>
-            <Settings />
+            {
+                rootStore.state === GameState.MENU &&
+                <Menu onStartGame={rootStore.startGame} />
+            }
+            {
+                rootStore.state === GameState.GAME &&
+                <>
+                    <Header field={field} />
+                    <GameField />
+                </>
+            }
         </div>
     );
-    return (
-        <>
-            <Header field={field} />
-            <GameField />
-        </>
-    );
-}
+});
+
 
 // function App() {
 //   return (

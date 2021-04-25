@@ -3,11 +3,19 @@ import {validate, ValidationErrors, FormValues} from './validation';
 
 import { cn as createCn } from '@bem-react/classname'
 
-import './Settings.css';
+import './Menu.css';
 
-const cn = createCn('settings');
+const cn = createCn('menu');
 
-export const Settings: React.FC = () => {
+interface Props {
+    onStartGame(args: {
+        width: number;
+        height: number;
+        bombs: number;
+    }): void;
+}
+
+export const Menu: React.FC<Props> = ({onStartGame}) => {
     const [width, setWidth] = useState('9');
     const [height, setHeight] = useState('9');
     const [bombs, setBombs] = useState('10');
@@ -18,6 +26,13 @@ export const Settings: React.FC = () => {
         const values: FormValues = {width, height, bombs};
         const validationErrors = validate(values);
         setValidationErrors(validationErrors);
+        if (Object.keys(validationErrors).length === 0) {
+            onStartGame({
+                width: +width,
+                height: +height,
+                bombs: +bombs
+            })
+        }
     }
 
     return (
