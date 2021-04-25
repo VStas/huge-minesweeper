@@ -1,28 +1,28 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { field, BOMB, GameField } from '../../store/GameField';
 import { cn as createCn } from '@bem-react/classname'
 import { RootContext } from '../../context';
 
 import './Header.css';
-
-interface Props {
-    field: GameField;
-}
+import { GameState } from '../../store/Root';
 
 const cn = createCn('header');
 
-export const Header: React.FC<Props> = observer(() => {
+export const Header: React.FC = observer(() => {
     const rootStore = React.useContext(RootContext);
+    const {state} = rootStore;
+    const {flagsLeft, cellsToOpen} = rootStore.gameField!;
 
     return (
         <div className={cn()}>
             <div className={cn('stats')}>
-                <div>Flags left: 1</div>
-                <div>Cells to open: 1</div>
+                <div>Flags left: {flagsLeft}</div>
+                <div>Cells to open: {cellsToOpen}</div>
             </div>
-            <div className={cn('smiley')}>
-                <button>😊</button>
+            <div>
+                <button onClick={rootStore.resetGame}>
+                    {state === GameState.WON ? '😎' : state === GameState.LOST ? '☹️' : '🙂'}
+                </button>
             </div>
         </div>
     );

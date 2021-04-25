@@ -1,14 +1,16 @@
 todo:
-- Users can only place as many flags as there are bombs (text above)
-- Opening cells (open nearby if 0)
-- Cell layout
-- Bomb generator
-- Opening cells
-- Losing
-- Winning
-- Form
-- Smiley bar
-1. Menu as default CRA screen. Its amazing.
++ Users can only place as many flags as there are bombs (text above)
++ Opening cells (open nearby if 0)
++ Cell layout
++ Bomb generator
++ Opening cells
++ Losing
++ Winning
++ Form
++ Smiley bar
+-. Menu as default CRA screen. Its amazing.
+
+Вроде иногда осталось открыть 1 и все равно статус WON по лицу странно
 
 Офигенно
 - Дивы переиспользуются

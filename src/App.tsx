@@ -1,8 +1,7 @@
 import React from 'react';
-import { GameField } from './components/GameField/GameField';
+import { GameField } from './scenes/game/GameField';
 import { Header } from './scenes/game/Header';
 import { Menu } from './scenes/menu/Menu';
-import { field } from './store/GameField';
 import { GameState } from './store/Root';
 // import logo from './logo.svg';
 import './App.css';
@@ -24,9 +23,9 @@ const App = observer(() => {
                 <Menu onStartGame={rootStore.startGame} />
             }
             {
-                rootStore.state === GameState.GAME &&
+                rootStore.state !== GameState.MENU &&
                 <>
-                    <Header field={field} />
+                    <Header />
                     <GameField />
                 </>
             }
