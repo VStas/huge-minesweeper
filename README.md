@@ -1,28 +1,35 @@
-todo:
-+ Users can only place as many flags as there are bombs (text above)
-+ Opening cells (open nearby if 0)
-+ Cell layout
-+ Bomb generator
-+ Opening cells
-+ Losing
-+ Winning
-+ Form
-+ Smiley bar
--. Menu as default CRA screen. Its amazing.
-+ tests
-- Readme
-- deploy
+HUGE Minesweeper
 
-Вроде иногда осталось открыть 1 и все равно статус WON по лицу странно
-Раскрасить цифры
-Написать пару тестов
+# Technical description
 
-Офигенно
-- Дивы переиспользуются
-- При клике обновляется только ячейка, в каждой минимум данных (и объект генерится на ходу)
-- Бомбы генерируются на ходу, при генерации этой ячейки (быстро, не сразу много памяти)
-- Пересчет близлежащих (memo)
-- Цикл буффер для открытия многих сразу пустых
+Implemented using MobX and React.
+
+MobX model classes are located in /src/store
+React components are located in /src/scenes
+
+## Main ideas
+
+When a game field is huge, it's impossible to render all cells at once. That's why, we use grid from 'react-window' library. It makes it possible to reuse same DOM elements when scrolling.
+
+Interaction with any cell will NOT trigger rendering of any other cells. This is because each cell is connected to it's individual MobX cell object.
+
+When a game field is huge, it would take time to generate a big array (or Set) with initial values for cells or bomb locations. That's why we don't do it.
+The logic is very "lazy". We create a cell object ONLY when our application wants to render that particular cell. And we generate a probable bomb in a cell ONLY when when really need that information:
+- when a user tries to open that cell
+- when a user opens some neighour cell and we need to count bombs
+- when a user looses and we need to show all bombs
+
+Cell component uses useMemo for memoization. So we don't have to recalculate nearby bombs all the time for that cell. But that information is not stored forever in store. So we save some memory.
+
+To save memory, each cell stores minimal data. Only it's status (INITIAL, OPEN or FLAGGED) and a boolean, if it has bomb.
+
+If a user opens a cell and it has 0 cells nearby, we start opening cells until we reach a number or the edge of the board. This is implemented using breadth first search and a queue. Queue is implemented as a circular buffer using a regular array. After some "portions" of opened cells we render the result. so the user won't wait for too long to see some changes :)
+
+## Bonus
+For a pleasant gaming experience similar to the real game, we never want the first click on the board to lose the game. That means players are not able to click on a bomb on the first click.
+
+## Tests
+There are some tests for gameplay scenarios and util functions :)
 
 
 # Getting Started with Create React App
