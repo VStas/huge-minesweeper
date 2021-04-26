@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { cn as createCn } from '@bem-react/classname'
+
 import { RootContext } from '../../context';
+import { GameState } from '../../types';
 
 import './Header.css';
-import { GameState } from '../../store/Root';
 
 const cn = createCn('header');
 

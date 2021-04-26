@@ -1,0 +1,51 @@
+.cell {
+    background: #ddd;
+    border: 1px solid #aaa;
+
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    user-select: none;
+}
+
+/* open */
+.cell_status_1 {
+    background: #fff;
+}
+
+/* flagged */
+.cell_status_2 {
+    background-image: url("sprite.png");
+}
+
+.cell_value_1 {
+    color: blue;
+}
+.cell_value_2 {
+    color: green;
+}
+.cell_value_3 {
+    color: red;
+}
+.cell_value_4 {
+    color: purple;
+}
+.cell_value_5 {
+    color: brown;
+}
+.cell_value_6 {
+    color: blue;
+}
+.cell_value_7 {
+    color: black;
+}
+.cell_value_8 {
+    color: grey;
+}
+
+/* bomb */
+.cell_value_-1 {
+    background: #f00;
+}

@@ -1,36 +1,3 @@
-.cell {
-    background: #ddd;
-    border: 1px solid #aaa;
-
-    /* width: 14px;
-    height: 14px; */
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    user-select: none;
-}
-
-
-/* open */
-.cell_status_1 {
-    background: #fff;
-}
-
-/* flagged */
-.cell_status_2 {
-    background-image: url("sprite.png");
-}
-
-.cell_value_1 {
-    color: blue;
-}
-
-.cell_value_-1 {
-    background: #f00;
-}
-
-.Grid {
+.game-field {
     background: #ddd;
 }

@@ -1,9 +1,7 @@
 import { action, makeObservable, observable } from "mobx";
-import { GameField } from "./GameField";
 
-export enum GameState {
-    MENU, PLAYING, WON, LOST
-}
+import { GameField } from "./GameField";
+import { GameState } from '../types';
 
 export class RootStore {
     state: GameState = GameState.MENU;
@@ -27,15 +25,22 @@ export class RootStore {
     }
 
     handleWin = () => {
-        this.state = GameState.WON;
+        if (this.state === GameState.PLAYING) {
+            this.state = GameState.WON;
+        } 
     }
 
     handleLoose = () => {
         this.state = GameState.LOST;
     }
 
-    // todo type
-    startGame = (values: any) => {
+    startGame = (
+        values: {
+            width: number;
+            height: number;
+            bombs: number;
+        }
+    ) => {
         this.state = GameState.PLAYING;
         this.gameField = new GameField(values.width, values.height, values.bombs, this.handleWin, this.handleLoose);
     }

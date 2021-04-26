@@ -9,6 +9,9 @@ todo:
 + Form
 + Smiley bar
 -. Menu as default CRA screen. Its amazing.
+- tests
+- Readme
+- deploy
 
 Вроде иногда осталось открыть 1 и все равно статус WON по лицу странно
 Раскрасить цифры

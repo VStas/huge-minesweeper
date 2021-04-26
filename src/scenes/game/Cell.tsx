@@ -4,11 +4,12 @@ import { GridChildComponentProps } from 'react-window';
 import { cn as createCn } from '@bem-react/classname'
 
 import { BOMB } from '../../store/GameField';
-import { CellStatus } from '../../types';
+import { CellStatus, GameState } from '../../types';
 import { RootContext } from '../../context';
 
-import './GameField.css';
-import { GameState } from '../../store/Root';
+import './Cell.css';
+
+const LEFT_MOUSE_BUTTON = 0;
 
 const cn = createCn('cell');
 
@@ -18,22 +19,21 @@ export const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, 
     const field = rootStore.gameField!;
 
     const cell = field.getCellByCoords(columnIndex, rowIndex);
-    const status = cell.status;
+    const cellStatus = cell.status;
 
-    // круто что мемо. И по памяти огонь и не надо пересчитывать
     const value = React.useMemo(() => {
-        if (status !== CellStatus.OPEN && state !== GameState.LOST) {
+        if (cellStatus !== CellStatus.OPEN && state !== GameState.LOST) {
             return;
         }
-      return field.getValueByCoords(columnIndex, rowIndex);
-    }, [columnIndex, rowIndex, field, status, state]);
+        return field.getValueByCoords(columnIndex, rowIndex);
+    }, [columnIndex, rowIndex, field, cellStatus, state]);
 
     function handleMouseDown(e: React.MouseEvent) {
         if (state !== GameState.PLAYING) {
             return;
         }
-        if (e.button === 0) {
-            if (status !== CellStatus.INITIAL) {
+        if (e.button === LEFT_MOUSE_BUTTON) {
+            if (cellStatus !== CellStatus.INITIAL) {
                 return;
             }
             field.open(columnIndex, rowIndex);
@@ -44,7 +44,7 @@ export const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, 
   
     return (
         <div
-            className={cn({value, status})}
+            className={cn({value, status: cellStatus})}
             style={style}
             onMouseDown={handleMouseDown}
             onContextMenu={(e) => {e.preventDefault();}}

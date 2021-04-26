@@ -1,4 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
+
 import { CellStatus } from "../types";
 
 export class Cell {
@@ -9,7 +10,6 @@ export class Cell {
     constructor() {
         makeObservable(this, {
             status: observable,
-            // hasBomb: observable,
             open: action,
         })
     }

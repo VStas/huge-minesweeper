@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
 
 import { CellStatus } from "../types";
-import { getRandomInt, countNearbyBombs, getNearby } from "../utils/bombs";
+import { getRandomInt, countNearbyBombs, getNearby, coordsToIdx } from "../utils/utils";
 import { CircularQueue } from "../utils/queue";
 import { Cell } from "./Cell";
 
@@ -53,12 +53,12 @@ export class GameField {
     }
 
     getCellByCoords(x: number, y: number) {
-        const index = y * this.width + x;
+        const index = coordsToIdx(x, y, this.width);
         return this.getCell(index);
     }
 
     toggleFlag(x: number, y: number) {
-        const index = y * this.width + x;
+        const index = coordsToIdx(x, y, this.width);
         const cell = this.cells[index];
         this.flagsPlaced += cell.toggleFlag(this.flagsPlaced < this.bombsTotal);
     }
@@ -87,7 +87,7 @@ export class GameField {
     }
 
     getValueByCoords(x: number, y: number) {
-        const index = y * this.width + x;
+        const index = coordsToIdx(x, y, this.width);
         return this.getValue(index);
     }
 
@@ -124,17 +124,17 @@ export class GameField {
         this.openRecursive();
     }
 
-    isOpeningRecursively = false;
+    private isOpeningRecursively = false;
 
-    async openRecursive() {
+    private async openRecursive() {
         if (this.isOpeningRecursively) {
             return;
         }
         this.isOpeningRecursively = true;
         let counter = 0;
-        while (this.queue.Front() !== -1) {
+        while (this.queue.front() !== -1) {
             counter += 1;
-            const index = this.queue.Front() as number;
+            const index = this.queue.front() as number;
             this.queue.deQueue();
 
             getNearby(index, this.width, this.height)

@@ -1,4 +1,5 @@
-// можно было оба указателя -1 делать когда пустое
+// Circular buffer
+// Implemented using array
 
 export class CircularQueue<T> {
     queue: (T  | undefined)[] = [];
@@ -36,12 +37,12 @@ export class CircularQueue<T> {
         return true;
     }
 
-    Front(): T | -1 {
+    front(): T | -1 {
         const value = this.queue[this.frontIdx]
         return value === undefined ? -1 : value;;
     }
 
-    Rear(): T | -1 {
+    rear(): T | -1 {
         let rearIdx = this.backIdx + 1;
         if (rearIdx === this.size) {
             rearIdx -= this.size;
@@ -58,14 +59,3 @@ export class CircularQueue<T> {
         return (this.frontIdx === this.backIdx && this.queue[this.frontIdx] !== undefined);
     }
 }
-
-/**
- * Your MyCircularQueue object will be instantiated and called as such:
- * var obj = new MyCircularQueue(k)
- * var param_1 = obj.enQueue(value)
- * var param_2 = obj.deQueue()
- * var param_3 = obj.Front()
- * var param_4 = obj.Rear()
- * var param_5 = obj.isEmpty()
- * var param_6 = obj.isFull()
- */
