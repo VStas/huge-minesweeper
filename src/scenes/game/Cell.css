@@ -11,41 +11,41 @@
 }
 
 /* open */
-.cell_status_1 {
+.cell_status_s1 {
     background: #fff;
 }
 
 /* flagged */
-.cell_status_2 {
+.cell_status_s2 {
     background-image: url("sprite.png");
 }
 
-.cell_value_1 {
+.cell_value_v1 {
     color: blue;
 }
-.cell_value_2 {
+.cell_value_v2 {
     color: green;
 }
-.cell_value_3 {
+.cell_value_v3 {
     color: red;
 }
-.cell_value_4 {
+.cell_value_v4 {
     color: purple;
 }
-.cell_value_5 {
+.cell_value_v5 {
     color: brown;
 }
-.cell_value_6 {
+.cell_value_v6 {
     color: blue;
 }
-.cell_value_7 {
+.cell_value_v7 {
     color: black;
 }
-.cell_value_8 {
+.cell_value_v8 {
     color: grey;
 }
 
 /* bomb */
-.cell_value_-1 {
+.cell_value_v-1 {
     background: #f00;
 }

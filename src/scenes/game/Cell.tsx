@@ -44,7 +44,7 @@ export const Cell: React.FC<GridChildComponentProps> = observer(({ columnIndex, 
   
     return (
         <div
-            className={cn({value, status: Number(cellStatus)})}
+            className={cn({value: `v${value}`, status: `s${cellStatus}`})}
             style={style}
             onMouseDown={handleMouseDown}
             onContextMenu={(e) => {e.preventDefault();}}
