@@ -28,7 +28,8 @@ export class GameField {
         public height: number,
         public bombsTotal: number,
         private onWin: () => void,
-        private onLoose: () => void
+        private onLoose: () => void,
+        private randomNumberGenerator: (args: {min: number, max: number}) => number = getRandomInt,
     ) {
         this.cells = [];
         this.cellsLeftToPlaceBombs = this.width * this.height;
@@ -98,7 +99,7 @@ export class GameField {
             return false;
         }
 
-        const rnd = getRandomInt({min: 1, max: this.cellsLeftToPlaceBombs});
+        const rnd = this.randomNumberGenerator({min: 1, max: this.cellsLeftToPlaceBombs});
         const result = rnd <= this.bombsToPlace;
         if (result) {
             this.bombsToPlace -= 1;

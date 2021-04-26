@@ -9,7 +9,7 @@ todo:
 + Form
 + Smiley bar
 -. Menu as default CRA screen. Its amazing.
-- tests
++ tests
 - Readme
 - deploy
 
@@ -22,7 +22,7 @@ todo:
 - При клике обновляется только ячейка, в каждой минимум данных (и объект генерится на ходу)
 - Бомбы генерируются на ходу, при генерации этой ячейки (быстро, не сразу много памяти)
 - Пересчет близлежащих (memo)
-
+- Цикл буффер для открытия многих сразу пустых
 
 
 # Getting Started with Create React App
